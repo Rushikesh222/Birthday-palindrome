@@ -1,3 +1,7 @@
+const bdate = document.getElementById("bday-input");
+const showbtn = document.getElementById("show-btn");
+const result = document.getElementById("result");
+
 function reverseStr(str) {
   const listofchars = str.split("");
   const reverselistofchar = listofchars.reverse();
@@ -8,7 +12,9 @@ function ispalindorme(str) {
   const reverse = reverseStr(str);
   return str === reverse;
 }
-
+const d = new Date();
+console.log(d);
+convertdatetostr(bdate);
 function convertdatetostr(date) {
   const datestr = { day: "", month: "", year: "" };
   if (date.day < 10) {
@@ -16,6 +22,7 @@ function convertdatetostr(date) {
   } else {
     datestr.day = date.day.toString();
   }
+  console.log(datestr.day);
   if (date.month < 10) {
     datestr.month = "0" + date.month;
   } else {
@@ -109,10 +116,6 @@ function getNextpalindromedate(date) {
 
   return [ctr, nextdate];
 }
-
-var bdate = document.querySelector("#bday-input");
-const showbtn = document.getElementById("shows-btn");
-const result = document.getElementById("result");
 
 function clickHandler(e) {
   var bday = bdate.value;
