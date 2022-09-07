@@ -1,60 +1,57 @@
-const bdate = document.getElementById("bday-input");
-const showbtn = document.getElementById("show-btn");
-const result = document.getElementById("result");
+const dateOfBirth = document.querySelector(".date-of-birth");
+const btnCheck = document.querySelector("#check-number");
+const Message = document.querySelector(".Message");
 
 function reverseStr(str) {
-  const listofchars = str.split("");
-  const reverselistofchar = listofchars.reverse();
-  const reversedstr = reverselistofchar.join("");
-  return reversedstr;
+  var listOfChar = str.split("");
+  var resverseListOfChar = listOfChar.reverse();
+  var reversedStr = resverseListOfChar.join("");
+  return reversedStr;
 }
-function ispalindorme(str) {
-  const reverse = reverseStr(str);
+function isPalindrome(str) {
+  var reverse = reverseStr(str);
   return str === reverse;
 }
-const d = new Date();
-console.log(d);
-convertdatetostr(bdate);
-function convertdatetostr(date) {
-  const datestr = { day: "", month: "", year: "" };
+
+function convertDateToString(date) {
+  var dateStr = { day: "", month: "", year: "" };
   if (date.day < 10) {
-    datestr.day = "0" + date.day;
+    dateStr.day = "0" + date.day;
   } else {
-    datestr.day = date.day.toString();
+    dateStr.day = date.day.toString();
   }
-  console.log(datestr.day);
   if (date.month < 10) {
-    datestr.month = "0" + date.month;
+    dateStr.month = "0" + date.month;
   } else {
-    datestr.month = date.month.toString();
+    dateStr.month = date.month.toString();
   }
-  datestr.year = date.year.toString();
-  return datestr;
+  dateStr.year = date.year.toString();
+  return dateStr;
 }
-function getdateallformats(date) {
-  const dateStr = convertdatetostr(date);
 
-  const ddmmyyyy = dateStr.day + dateStr.month + dateStr.year;
-  const mmddyyyy = dateStr.month + dateStr.day + dateStr.year;
-  const yyyymmdd = dateStr.year + dateStr.month + dateStr.day;
-  const ddmmyy = dateStr.day + dateStr.month + dateStr.year.slice(-2);
-  const mmddyy = dateStr.month + dateStr.day + dateStr.year.slice(-2);
-  const yymmdd = dateStr.year.slice(-2) + dateStr.month + dateStr.day;
-
+function getAllDateFromats(date) {
+  var dateStr = convertDateToString(date);
+  var ddmmyyyy = dateStr.day + dateStr.month + dateStr.year;
+  var mmddyyyy = dateStr.month + dateStr.day + dateStr.year;
+  var yyyymmdd = dateStr.year + dateStr.month + dateStr.day;
+  var ddmmyy = dateStr.day + dateStr.month + dateStr.year.slice(-2);
+  var mmddyy = dateStr.month + dateStr.day + dateStr.year.slice(-2);
+  var yymmdd = dateStr.year.slice(-2) + dateStr.month + dateStr.day;
   return [ddmmyyyy, mmddyyyy, yyyymmdd, ddmmyy, mmddyy, yymmdd];
 }
-function checkpalindormeforalldateFormate(date) {
-  var listofpalindrome = getdateallformats(date);
+function checkPalindromeFoAllFormate(date) {
+  var listOfPalindrome = getAllDateFromats(date);
   var flag = false;
-  for (var i = 0; i < listofpalindrome.length; i++) {
-    if (ispalindorme(listofpalindrome[i])) {
+  for (i = 0; i < listOfPalindrome.length; i++) {
+    if (isPalindrome(listOfPalindrome[i])) {
       flag = true;
       break;
     }
   }
   return flag;
 }
-function isLeapyear(year) {
+// check leap year
+function isLeapYear(year) {
   if (year % 400 === 0) {
     return true;
   }
@@ -65,16 +62,15 @@ function isLeapyear(year) {
     return true;
   }
   return false;
-}
-function getNextdate(date) {
+} //get the next date
+function getNextDate(date) {
   var day = date.day + 1;
   var month = date.month;
   var year = date.year;
-
-  var dayinmonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
+  var dayIsMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //0-1
   if (month === 2) {
-    if (isLeapyear(year)) {
+    //check for february
+    if (isLeapYear(year)) {
       if (day > 29) {
         day = 1;
         month++;
@@ -86,7 +82,8 @@ function getNextdate(date) {
       }
     }
   } else {
-    if (day > dayinmonth[month - 1]) {
+    //check if the day exceed the max days in month
+    if (day > dayIsMonth[month - 1]) {
       day = 1;
       month++;
     }
@@ -101,38 +98,46 @@ function getNextdate(date) {
     year: year,
   };
 }
-function getNextpalindromedate(date) {
+function getNextPalindromeDate(date) {
   var ctr = 0;
-  var nextdate = getNextdate(date);
-
+  var nextDate = getNextDate(date);
   while (1) {
     ctr++;
-    var ispalindrome = checkpalindormeforalldateFormate(nextdate);
-    if (ispalindrome) {
+    var isPalindrome = checkPalindromeFoAllFormate(nextDate);
+    if (isPalindrome) {
       break;
     }
-    nextdate = getNextdate(nextdate);
+    nextDate = getNextDate(nextDate);
   }
-
-  return [ctr, nextdate];
+  return [ctr, nextDate];
 }
 
 function clickHandler(e) {
-  var bday = bdate.value;
-  if (bday !== "") {
-    var listofdate = bday.split("_");
+  var bdayStr = dateOfBirth.value;
+  if (bdayStr != "") {
+    var listNode = bdayStr.split("-");
     var date = {
-      day: Number(listofdate[2]),
-      month: Number(listofdate[1]),
-      year: Number(listofdate[0]),
+      day: Number(listNode[2]),
+      month: Number(listNode[1]),
+      year: Number(listNode[0]),
     };
-    var isPalindorme = checkpalindormeforalldateFormate(date);
-    if (isPalindorme) {
-      result.innerText = "yay! your birthday is a palindrome";
+    var isPalindrome = checkPalindromeFoAllFormate(date);
+    if (isPalindrome) {
+      Message.innerText = "Yay! your Birthday is a Palindrome!! 🤗🤗";
     } else {
-      var [ctr, nextdate] = getNextpalindromedate(date);
-      result.innerText = `the next palindrome date is ${nextdate.day}-${nextdate.month}-${nextdate.year}, you missed it by ${ctr} days! `;
+      var [ctr, nextDate] = getNextPalindromeDate(date);
+      Message.innerText = `the next palindrome date is ${nextDate.day}-${nextDate.month}-${nextDate.year}, you missed it by ${ctr} Day!😔`;
     }
   }
 }
-showbtn.addEventListener("click", clickHandler);
+btnCheck.addEventListener("click", clickHandler);
+
+// var date = {
+//   day: 11,
+//   month: 2,
+//   year: 2020,
+// };
+// console.log(getNextPalindromeDate(date));
+
+// https://lucky-birthdatego.netlify.app/
+// PERVIOUS palindrome date and how mand days are remaining it not mandatoyre
